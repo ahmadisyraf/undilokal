@@ -4,7 +4,7 @@ import PlaceList from "@/components/placelist";
 
 export default function PlaceLists({ tempat }) {
   return (
-    <Box px={5} pt={10}>
+    <Box px={5} py={10}>
       <Grid
         templateColumns={{
           base: "1fr",
