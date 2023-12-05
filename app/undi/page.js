@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import PlaceLists from "./placelists";
 
 export const revalidate = 0; 
@@ -18,8 +19,8 @@ export default async function Undi() {
   const tempat = await getData();
 
   return (
-    <div>
+    <Box py={10}>
       <PlaceLists tempat={tempat} />
-    </div>
+    </Box>
   );
 }
