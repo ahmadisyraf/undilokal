@@ -1,25 +1,40 @@
 "use client";
 
-import {
-  Box,
-  Avatar,
-  Text,
-  Flex,
-  HStack,
-  Stack,
-  RadioGroup,
-  Radio,
-} from "@chakra-ui/react";
+import { Box, Text, Flex, Stack, RadioGroup, Radio } from "@chakra-ui/react";
 import { FaLocationDot } from "react-icons/fa6";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import useObjectStore from "@/store/undi";
 
 export default function PlaceList({ d }) {
-  const [value, setValue] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const { objects, addObject } = useObjectStore();
+
+  const userInteracted = objects.some((obj) => obj.id === d.id);
+  const userInteractedObject = objects.find((obj) => obj.id === d.id);
+
+  const [value, setValue] = useState(0);
+  const [stateValue, setStateValue] = useState(0);
+
+  useEffect(() => {
+    if (userInteracted === true) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [userInteracted]);
+
+  useEffect(() => {
+    if(userInteractedObject) {
+      setStateValue(userInteractedObject.value);
+    }
+  }, [userInteractedObject])
+
   const router = useRouter();
 
   const handleLikeStatusChange = async (value) => {
@@ -56,6 +71,10 @@ export default function PlaceList({ d }) {
         console.log(res);
         router.refresh();
         setIsLoading(false);
+        addObject({
+          id: d.id,
+          value: value,
+        });
       } else {
         toast.error("Gagal disimpan", { id: loadingToast });
         setIsLoading(false);
@@ -99,12 +118,16 @@ export default function PlaceList({ d }) {
           </Flex>
           <RadioGroup
             mt={2}
-            value={value}
+            value={userInteractedObject ? stateValue : value}
             onChange={(value) => handleLikeStatusChange(value)}
           >
             <Stack direction={"row"}>
-              <Radio value="1" isDisabled={isLoading}>Suka</Radio>
-              <Radio value="2" isDisabled={isLoading}>Tidak Suka</Radio>
+              <Radio value="1" isDisabled={isLoading || isDisabled}>
+                Suka
+              </Radio>
+              <Radio value="2" isDisabled={isLoading || isDisabled}>
+                Tidak Suka
+              </Radio>
             </Stack>
           </RadioGroup>
         </Box>
