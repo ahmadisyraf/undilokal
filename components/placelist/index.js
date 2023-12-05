@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 
 export default function PlaceList({ d }) {
   const [value, setValue] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleLikeStatusChange = async (value) => {
@@ -40,6 +41,7 @@ export default function PlaceList({ d }) {
 
     try {
       const loadingToast = toast.loading("Sila tunggu");
+      setIsLoading(true);
       const response = await fetch(`/api/tempat/${d.id}`, {
         method: "PATCH",
         headers: {
@@ -53,13 +55,16 @@ export default function PlaceList({ d }) {
         const res = await response.json();
         console.log(res);
         router.refresh();
+        setIsLoading(false);
       } else {
         toast.error("Gagal disimpan", { id: loadingToast });
+        setIsLoading(false);
       }
     } catch (error) {
       toast.error("Gagal disimpan", { id: loadingToast });
       console.error("Error updating like status:", error);
-    } 
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -98,8 +103,8 @@ export default function PlaceList({ d }) {
             onChange={(value) => handleLikeStatusChange(value)}
           >
             <Stack direction={"row"}>
-              <Radio value="1">Suka</Radio>
-              <Radio value="2">Tidak Suka</Radio>
+              <Radio value="1" isDisabled={isLoading}>Suka</Radio>
+              <Radio value="2" isDisabled={isLoading}>Tidak Suka</Radio>
             </Stack>
           </RadioGroup>
         </Box>
