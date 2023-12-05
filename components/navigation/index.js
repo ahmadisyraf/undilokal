@@ -1,24 +1,25 @@
 "use client";
 
-import {
-  Box,
-  Text,
-  Flex,
-  Avatar,
-  Spacer,
-} from "@chakra-ui/react";
+import { Box, Text, Flex, Avatar, Spacer, Button } from "@chakra-ui/react";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Navigation() {
   const [value, seValue] = useState("1");
   return (
     <Box px={5} py={5}>
       <Flex align={"center"}>
-        <Text fontWeight={600} fontSize={"xl"}>
-          Undi Lokal
-        </Text>
+        <Link href={"/"}>
+          <Text fontWeight={600} fontSize={"xl"}>
+            Undi Lokal
+          </Text>
+        </Link>
         <Spacer />
-        {/* <Avatar size={"sm"} /> */}
+        <Link href={"/tambah"}>
+          <Button variant={"solid"} colorScheme={"blue"} size={"sm"}>
+            Tambah
+          </Button>
+        </Link>
       </Flex>
     </Box>
   );

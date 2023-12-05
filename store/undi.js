@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+
 
 const useObjectStore = create(
   persist(
@@ -7,13 +8,15 @@ const useObjectStore = create(
       objects: [],
       addObject: (newObject) =>
         set((state) => ({ objects: [...state.objects, newObject] })),
-      // removeObject: (index) => set((state) => ({ objects: state.objects.filter((_, i) => i !== index) })),
+      submitted: false,
+      setSubmitted: (value) => set({ submitted: value }),
     }),
     {
-      name: 'object-store', // Unique name for the persisted data
-      storage: createJSONStorage(() => sessionStorage), // Use localStorage as the storage mechanism
+      name: "object-store",
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );
 
-export default useObjectStore;
+
+export default useObjectStore

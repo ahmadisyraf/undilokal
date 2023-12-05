@@ -3,8 +3,10 @@ import { Input, Button, Stack, Box, Heading } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import useObjectStore from "@/store/undi";
 
 const schema = yup.object({
   inputName: yup.string().required("Nama tempat perlu di isi"),
@@ -20,7 +22,18 @@ export default function AddForm() {
     resolver: yupResolver(schema),
   });
 
+  const router = useRouter();
+  const { submitted, setSubmitted } = useObjectStore();
+
   const [isLoading, setIsLoading] = useState(false);
+
+  const [limit, setLimit] = useState(false);
+
+  useEffect(() => {
+    if(submitted) {
+      setLimit(true);
+    }
+  }, [submitted])
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -46,6 +59,10 @@ export default function AddForm() {
       });
 
       setIsLoading(false);
+
+      setSubmitted(true);
+
+      router.push("/");
     } catch (err) {
       setIsLoading(false);
 
@@ -64,20 +81,20 @@ export default function AddForm() {
           size="md"
           {...register("inputName")}
           isInvalid={errors.inputName ? true : false}
-          isDisabled={isLoading}
+          isDisabled={isLoading || limit}
         />
         <Input
           placeholder="Lokasi"
           size="md"
           {...register("inputAddress")}
           isInvalid={errors.inputAddress ? true : false}
-          isDisabled={isLoading}
+          isDisabled={isLoading || limit}
         />
         <Button
           colorScheme="blue"
           variant="solid"
           type="submit"
-          isDisabled={isLoading}
+          isDisabled={isLoading || limit}
         >
           Simpan
         </Button>
