@@ -131,7 +131,7 @@ export default function PlaceList({ d }) {
       if (!response.ok) {
         toast.error("Gagal disimpan", { id: loadingToast });
       } else {
-        toast.success("Komen berjaya dismpan", { id: loadingToast });
+        toast.success("Komen berjaya disimpan", { id: loadingToast });
       }
 
       setIsLoading(false);

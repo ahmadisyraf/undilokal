@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "UndiLokal",
-  description: "Apa yang best dekat sini?",
+  description: "Share port best",
 };
 
 export default function RootLayout({ children }) {
