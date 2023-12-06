@@ -1,5 +1,7 @@
-import { Box } from "@chakra-ui/react";
-import PlaceLists from "./placelists";
+import { Box, Text } from "@chakra-ui/react";
+import Loading from "./placelists/loading";
+import dynamic from "next/dynamic";
+const PlaceLists = dynamic(() => import('./placelists'), { loading: () => <Loading />})
 
 export const revalidate = 0; 
 async function getData() {
