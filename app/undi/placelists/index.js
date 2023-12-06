@@ -1,6 +1,17 @@
 "use client";
+
 import { Grid, GridItem, Box } from "@chakra-ui/react";
-import PlaceList from "@/components/placelist";
+
+import dynamic from "next/dynamic";
+
+import Loading from "./loading";
+
+const PlaceList = dynamic(() => import("@/components/placelist"), {
+  loading: () => <Loading />,
+  ssr: false
+});
+
+// import PlaceList from "@/components/placelist";
 
 export default function PlaceLists({ tempat }) {
   return (
@@ -14,7 +25,7 @@ export default function PlaceLists({ tempat }) {
         gap={10}
         justifyContent={"center"}
       >
-        {tempat.map((d, index) => (
+        {tempat?.map((d, index) => (
           <GridItem key={index}>
             <PlaceList d={d} />
           </GridItem>
