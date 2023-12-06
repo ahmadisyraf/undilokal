@@ -186,7 +186,7 @@ export default function PlaceList({ d }) {
             </Stack>
           </RadioGroup>
           <Box mt={3}>
-            <Text>Comments :</Text>
+            <Text>Komen :</Text>
             <List spacing={3} my={2}>
               {d.comments.map((d, index) => (
                 <ListItem key={index}>
