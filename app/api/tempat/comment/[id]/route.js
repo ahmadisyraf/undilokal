@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -20,15 +20,15 @@ export async function POST(req = NextRequest, { params }) {
     });
 
     if (newComment) {
-      return NextResponse.json(newComment);
+      return NextResponse.json(newComment, { status: 201 });
     } else {
-      return NextResponse.json({ message: "Failed insert to database" });
+      return NextResponse.json({ status: 400 });
     }
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
+    return NextResponse.json({ error: err }, { status: 500 });
   }
 }
 
 export async function GET() {
-  return NextResponse.json({ health: "OK" });
+  return NextResponse.json({ health: "OK" }, { status: 200 });
 }

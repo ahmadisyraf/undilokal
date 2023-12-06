@@ -19,11 +19,11 @@ export async function PATCH(req = NextRequest, { params }) {
     });
 
     if (updateListing) {
-      return NextResponse.json(updateListing);
+      return NextResponse.json(updateListing, { status: 200 });
     } else {
-      return NextResponse.json({ message: "Failed" });
+      return NextResponse.json({ status: 404 });
     }
   } catch (err) {
-    return NextResponse.json({ message: err });
+    return NextResponse.json({ message: err }, { status: 500 });
   }
 }

@@ -45,6 +45,7 @@ export default function PlaceList({ d }) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -132,6 +133,7 @@ export default function PlaceList({ d }) {
         toast.error("Gagal disimpan", { id: loadingToast });
       } else {
         toast.success("Komen berjaya disimpan", { id: loadingToast });
+        reset();
       }
 
       setIsLoading(false);

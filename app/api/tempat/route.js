@@ -17,10 +17,12 @@ export async function POST(req = NextRequest) {
     });
 
     if (tempat) {
-      return NextResponse.json(tempat);
+      return NextResponse.json(tempat, { status: 201 });
+    } else {
+      return NextResponse.json({ status: 400 });
     }
   } catch (err) {
-    return NextResponse.json({ error: err });
+    return NextResponse.json({ error: err }, { status: 500 });
   }
 }
 
@@ -33,11 +35,11 @@ export async function GET() {
     });
 
     if (!tempat) {
-      return NextResponse.json({ message: "Tempat tidak wujud" });
+      return NextResponse.json({ status: 400 });
+    } else {
+      return NextResponse.json(tempat, { status: 200 });
     }
-
-    return NextResponse.json(tempat);
   } catch (err) {
-    return NextResponse.json({ error: err });
+    return NextResponse.json({ error: err }, { status: 500 });
   }
 }
