@@ -26,7 +26,11 @@ export async function POST(req = NextRequest) {
 
 export async function GET() {
   try {
-    const tempat = await prisma.listing.findMany();
+    const tempat = await prisma.listing.findMany({
+      include: {
+        comments: true,
+      },
+    });
 
     if (!tempat) {
       return NextResponse.json({ message: "Tempat tidak wujud" });

@@ -1,6 +1,19 @@
 "use client";
 
-import { Box, Text, Flex, Stack, RadioGroup, Radio } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Flex,
+  Stack,
+  RadioGroup,
+  Radio,
+  Textarea,
+  List,
+  ListItem,
+  ListIcon,
+  Button,
+  Spacer,
+} from "@chakra-ui/react";
 import { FaLocationDot } from "react-icons/fa6";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
@@ -8,6 +21,14 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import useObjectStore from "@/store/undi";
+import { FaComment } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object({
+  inputComment: yup.string().required("Komen perlu di isi"),
+});
 
 export default function PlaceList({ d }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +42,14 @@ export default function PlaceList({ d }) {
   const [value, setValue] = useState(0);
   const [stateValue, setStateValue] = useState(0);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   useEffect(() => {
     if (userInteracted === true) {
       setIsDisabled(true);
@@ -30,10 +59,10 @@ export default function PlaceList({ d }) {
   }, [userInteracted]);
 
   useEffect(() => {
-    if(userInteractedObject) {
+    if (userInteractedObject) {
       setStateValue(userInteractedObject.value);
     }
-  }, [userInteractedObject])
+  }, [userInteractedObject]);
 
   const router = useRouter();
 
@@ -86,20 +115,46 @@ export default function PlaceList({ d }) {
     }
   };
 
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+
+    try {
+      const loadingToast = toast.loading("Sila tunggu");
+      const response = await fetch(`/api/tempat/comment/${d.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        toast.error("Gagal disimpan", { id: loadingToast });
+      } else {
+        toast.success("Komen berjaya dismpan", { id: loadingToast });
+      }
+
+      setIsLoading(false);
+      router.refresh();
+    } catch (err) {
+      toast.error("Gagal disimpan", { id: loadingToast });
+      console.log(err);
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Box>
-      <Flex>
+    <Box w={"100%"} position={"relative"}>
+      <Flex w={"100%"}>
         {/* <Avatar></Avatar> */}
-        <Box ml={5}>
+        <Box>
           <Text fontSize={"lg"} fontWeight={600}>
             {d.name}
           </Text>
           <Flex color={"GrayText"}>
             <Flex align={"center"}>
-              <FaLocationDot />
-              <Text ml={2} fontSize={"md"}>
-                {d.address}
-              </Text>
+              {/* <FaLocationDot /> */}
+              <Text fontSize={"md"}>{d.address}</Text>
             </Flex>
           </Flex>
           <Flex color={"GrayText"}>
@@ -130,8 +185,39 @@ export default function PlaceList({ d }) {
               </Radio>
             </Stack>
           </RadioGroup>
+          <Box mt={3}>
+            <Text>Comments :</Text>
+            <List spacing={3} my={2}>
+              {d.comments.map((d, index) => (
+                <ListItem>
+                  <ListIcon as={FaComment} color="gray.500" />
+                  {d.comment}
+                </ListItem>
+              ))}
+            </List>
+          </Box>
         </Box>
       </Flex>
+      <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+        <Textarea
+          placeholder="Memberi komen"
+          mt={2}
+          w={"100%"}
+          {...register("inputComment")}
+          isInvalid={errors.inputComment ? true : false}
+          isDisabled={isLoading}
+        />
+        <Button
+          variant={"solid"}
+          colorScheme={"blue"}
+          size={"sm"}
+          mt={3}
+          type="submit"
+          isDisabled={isLoading}
+        >
+          Komen
+        </Button>
+      </Box>
     </Box>
   );
 }

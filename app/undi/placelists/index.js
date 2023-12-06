@@ -8,14 +8,12 @@ import Loading from "./loading";
 
 const PlaceList = dynamic(() => import("@/components/placelist"), {
   loading: () => <Loading />,
-  ssr: false
+  ssr: false,
 });
-
-// import PlaceList from "@/components/placelist";
 
 export default function PlaceLists({ tempat }) {
   return (
-    <Box px={5}>
+    <Box width={"100%"} px={10}>
       <Grid
         templateColumns={{
           base: "1fr",
@@ -24,9 +22,10 @@ export default function PlaceLists({ tempat }) {
         }}
         gap={10}
         justifyContent={"center"}
+        w={"100%"}
       >
         {tempat?.map((d, index) => (
-          <GridItem key={index}>
+          <GridItem key={index} w={"100%"}>
             <PlaceList d={d} />
           </GridItem>
         ))}
