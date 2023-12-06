@@ -189,7 +189,7 @@ export default function PlaceList({ d }) {
             <Text>Comments :</Text>
             <List spacing={3} my={2}>
               {d.comments.map((d, index) => (
-                <ListItem>
+                <ListItem key={index}>
                   <ListIcon as={FaComment} color="gray.500" />
                   {d.comment}
                 </ListItem>
