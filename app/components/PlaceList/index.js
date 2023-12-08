@@ -15,7 +15,6 @@ import {
   Spacer,
   Link,
 } from "@chakra-ui/react";
-import { FaLocationDot } from "react-icons/fa6";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
 import { useEffect, useState } from "react";
@@ -27,7 +26,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MdReport } from "react-icons/md";
-import ReportModal from "../ReportModal";
 
 const schema = yup.object({
   inputComment: yup.string().required("Komen perlu di isi"),
@@ -36,7 +34,6 @@ const schema = yup.object({
 export default function PlaceList({ d }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [openReportModal, setOpenReportModal] = useState(false);
 
   const { objects, addObject } = useObjectStore();
 
@@ -54,10 +51,6 @@ export default function PlaceList({ d }) {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
-  const handleReportModal = () => {
-    setOpenReportModal(false);
-  };
 
   useEffect(() => {
     if (userInteracted === true) {
@@ -156,7 +149,6 @@ export default function PlaceList({ d }) {
   return (
     <Box w={"100%"} position={"relative"}>
       <Flex w={"100%"}>
-        {/* <Avatar></Avatar> */}
         <Box>
           <Text fontSize={"lg"} fontWeight={600}>
             {d.name}
@@ -178,12 +170,6 @@ export default function PlaceList({ d }) {
               <AiFillDislike />
               <Text ml={2} fontSize={"md"}>
                 {d.dislike}
-              </Text>
-            </Flex>
-            <Flex align={"center"} ml={5}>
-              <MdReport />
-              <Text ml={2} fontSize={"md"}>
-                {"200"}
               </Text>
             </Flex>
           </Flex>
@@ -233,18 +219,6 @@ export default function PlaceList({ d }) {
         >
           Komen
         </Button>
-        {/* In development */}
-        {/* <Button
-          size={"sm"}
-          variant={"outline"}
-          mt={3}
-          ml={3}
-          leftIcon={<MdReport size={15} />}
-          onClick={() => setOpenReportModal(true)}
-        >
-          Laporkan Siaran
-        </Button> */}
-        <ReportModal isOpen={openReportModal} handleClose={handleReportModal} />
       </Box>
     </Box>
   );

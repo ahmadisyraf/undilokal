@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 const PlaceLists = dynamic(() => import("@/app/undi/placelists"), {
   ssr: false,
 });
+
 import { Box } from "@chakra-ui/react";
 
 export const revalidate = 0;

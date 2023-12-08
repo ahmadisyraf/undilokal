@@ -1,7 +1,7 @@
-import Navigation from "@/components/Navigation";
+import Navigation from "@/app/components/Navigation";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Toaster } from "react-hot-toast";
-import Footer from "@/components/Footer";
+import Footer from "@/app/components/Footer";
 
 export const metadata = {
   title: "UndiLokal - Share Port Best",
