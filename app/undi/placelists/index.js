@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 
 import Loading from "./loading";
 
-const PlaceList = dynamic(() => import("@/app/components/PlaceList"), {
+const PlaceList = dynamic(() => import("@/components/PlaceList"), {
   loading: () => <Loading />,
   ssr: false,
 });

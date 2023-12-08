@@ -16,7 +16,6 @@ model Listing {
   address  String
   like     Int
   dislike  Int
-  report   Int
   comments Comment[]
 }
 
