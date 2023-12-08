@@ -11,17 +11,18 @@ generator client {
 }
 
 model Listing {
-  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
   name     String
   address  String
   like     Int
   dislike  Int
+  report   Int
   comments Comment[]
 }
 
 model Comment {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   comment   String
   listing   Listing? @relation(fields: [listingId], references: [id])
-  listingId String  @db.ObjectId
+  listingId String   @db.ObjectId
 }
