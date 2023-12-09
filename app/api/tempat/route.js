@@ -30,7 +30,11 @@ export async function GET() {
   try {
     const tempat = await prisma.listing.findMany({
       include: {
-        comments: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
 

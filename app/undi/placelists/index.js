@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid, GridItem, Box } from "@chakra-ui/react";
+import { Grid, GridItem, Box, Link } from "@chakra-ui/react";
 
 import dynamic from "next/dynamic";
 
@@ -14,6 +14,17 @@ const PlaceList = dynamic(() => import("@/components/PlaceList"), {
 export default function PlaceLists({ tempat }) {
   return (
     <Box width={"100%"} px={10}>
+      <Box pb={8}>
+        <Link
+          href="/tambah"
+          color={"gray.500"}
+          fontWeight={500}
+          fontStyle={"italic"}
+          textDecoration={"underline"}
+        >
+          Tambah lokasi? Klik di sini
+        </Link>
+      </Box>
       <Grid
         templateColumns={{
           base: "1fr",

@@ -14,6 +14,7 @@ import {
   Button,
   Spacer,
   Link,
+  Avatar,
 } from "@chakra-ui/react";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
@@ -25,7 +26,7 @@ import { FaComment } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { MdReport } from "react-icons/md";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 
 const schema = yup.object({
   inputComment: yup.string().required("Komen perlu di isi"),
@@ -189,37 +190,57 @@ export default function PlaceList({ d }) {
           </RadioGroup>
           <Box mt={3}>
             <Text>Komen :</Text>
-            <List spacing={3} my={2}>
+            <Box>
               {d.comments.map((d, index) => (
-                <ListItem key={index}>
-                  <ListIcon as={FaComment} color="gray.500" />
-                  {d.comment}
-                </ListItem>
+                <Box my={3} key={index}>
+                  <Flex alignItems={"center"}>
+                    <Avatar src={d.user?.image} />
+                    <Box ml={3}>
+                      <Flex>
+                        <Text fontWeight={600}>
+                          {d.user ? d.user.lastName : "Anonymous"}
+                        </Text>
+                      </Flex>
+                      <Box>
+                        <Text>{d.comment}</Text>
+                      </Box>
+                    </Box>
+                  </Flex>
+                </Box>
               ))}
-            </List>
+            </Box>
           </Box>
         </Box>
       </Flex>
-      <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-        <Textarea
-          placeholder="Memberi komen"
-          mt={2}
-          w={"100%"}
-          {...register("inputComment")}
-          isInvalid={errors.inputComment ? true : false}
-          isDisabled={isLoading}
-        />
-        <Button
-          variant={"solid"}
-          colorScheme={"blue"}
-          size={"sm"}
-          mt={3}
-          type="submit"
-          isDisabled={isLoading}
-        >
-          Komen
-        </Button>
-      </Box>
+      <SignedIn>
+        <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+          <Textarea
+            placeholder="Memberi komen"
+            mt={2}
+            w={"100%"}
+            {...register("inputComment")}
+            isInvalid={errors.inputComment ? true : false}
+            isDisabled={isLoading}
+          />
+          <Button
+            variant={"solid"}
+            colorScheme={"blue"}
+            size={"sm"}
+            mt={3}
+            type="submit"
+            isDisabled={isLoading}
+          >
+            Komen
+          </Button>
+        </Box>
+      </SignedIn>
+      <SignedOut>
+        <Link href="/sign-in">
+          <Text color={"GrayText"} fontWeight={500} fontStyle={"italic"} textDecoration={"underline"}>
+            Ingin memberi komen? Log masuk
+          </Text>
+        </Link>
+      </SignedOut>
     </Box>
   );
 }
