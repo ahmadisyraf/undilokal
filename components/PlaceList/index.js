@@ -15,6 +15,7 @@ import {
   Spacer,
   Link,
   Avatar,
+  Divider,
 } from "@chakra-ui/react";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
