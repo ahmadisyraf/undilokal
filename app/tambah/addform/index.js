@@ -30,10 +30,10 @@ export default function AddForm() {
   const [limit, setLimit] = useState(false);
 
   useEffect(() => {
-    if(submitted) {
+    if (submitted) {
       setLimit(true);
     }
-  }, [submitted])
+  }, [submitted]);
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -44,6 +44,7 @@ export default function AddForm() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: jwtToken,
         },
         body: JSON.stringify(data),
       });
