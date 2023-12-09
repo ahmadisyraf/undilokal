@@ -15,6 +15,7 @@ import {
   Spacer,
   Link,
   Avatar,
+  Divider,
 } from "@chakra-ui/react";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
@@ -174,20 +175,22 @@ export default function PlaceList({ d }) {
               </Text>
             </Flex>
           </Flex>
-          <RadioGroup
-            mt={2}
-            value={userInteractedObject ? stateValue : value}
-            onChange={(value) => handleLikeStatusChange(value)}
-          >
-            <Stack direction={"row"}>
-              <Radio value="1" isDisabled={isLoading || isDisabled}>
-                Suka
-              </Radio>
-              <Radio value="2" isDisabled={isLoading || isDisabled}>
-                Tidak Suka
-              </Radio>
-            </Stack>
-          </RadioGroup>
+          <SignedIn>
+            <RadioGroup
+              mt={2}
+              value={userInteractedObject ? stateValue : value}
+              onChange={(value) => handleLikeStatusChange(value)}
+            >
+              <Stack direction={"row"}>
+                <Radio value="1" isDisabled={isLoading || isDisabled}>
+                  Suka
+                </Radio>
+                <Radio value="2" isDisabled={isLoading || isDisabled}>
+                  Tidak Suka
+                </Radio>
+              </Stack>
+            </RadioGroup>
+          </SignedIn>
           <Box mt={3}>
             <Text>Komen :</Text>
             <Box>
@@ -236,7 +239,12 @@ export default function PlaceList({ d }) {
       </SignedIn>
       <SignedOut>
         <Link href="/sign-in">
-          <Text color={"GrayText"} fontWeight={500} fontStyle={"italic"} textDecoration={"underline"}>
+          <Text
+            color={"GrayText"}
+            fontWeight={500}
+            fontStyle={"italic"}
+            textDecoration={"underline"}
+          >
             Ingin memberi komen? Log masuk
           </Text>
         </Link>
