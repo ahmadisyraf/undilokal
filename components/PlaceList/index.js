@@ -19,6 +19,7 @@ import {
   Image,
   AspectRatio,
   Card,
+  Skeleton,
 } from "@chakra-ui/react";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
@@ -161,7 +162,9 @@ export default function PlaceList({ d }) {
                 <Avatar src={d.user?.image} />
                 <Box ml={3}>
                   <Text fontWeight={600}>
-                    {d.user ? d.user.firstName + " " + d.user.lastName : "Anonymous"}
+                    {d.user
+                      ? d.user.firstName + " " + d.user.lastName
+                      : "Anonymous"}
                   </Text>
                   <Text color={"GrayText"}>{d.user.email}</Text>
                 </Box>
@@ -172,7 +175,18 @@ export default function PlaceList({ d }) {
         {d.image ? (
           <Box pb={5} borderRadius={15} overflow={"hidden"}>
             <AspectRatio ratio={3 / 2} borderRadius={15} overflow={"hidden"}>
-              <Image src={d.image} fit={"contain"} />
+              <Image
+                src={d.image}
+                fit={"contain"}
+                fallback={
+                  <Skeleton
+                    height={450 * (2 / 3)}
+                    width="100%"
+                  />
+                }
+                loading="lazy"
+                sizes
+              />
             </AspectRatio>
           </Box>
         ) : null}
@@ -210,7 +224,9 @@ export default function PlaceList({ d }) {
                       <Box ml={3}>
                         <Flex>
                           <Text fontWeight={600}>
-                            {d.user ? d.user.firstName + " " + d.user.lastName : "Anonymous"}
+                            {d.user
+                              ? d.user.firstName + " " + d.user.lastName
+                              : "Anonymous"}
                           </Text>
                         </Flex>
                         <Box>
