@@ -16,6 +16,9 @@ import {
   Link,
   Avatar,
   Divider,
+  Image,
+  AspectRatio,
+  Card,
 } from "@chakra-ui/react";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
@@ -149,19 +152,41 @@ export default function PlaceList({ d }) {
   };
 
   return (
-    <Box w={"100%"} position={"relative"}>
-      <Flex w={"100%"}>
-        <Box>
-          <Text fontSize={"lg"} fontWeight={600}>
-            {d.name}
-          </Text>
-          <Flex color={"GrayText"}>
-            <Flex align={"center"}>
-              {/* <FaLocationDot /> */}
-              <Text fontSize={"md"}>{d.address}</Text>
+    <Card variant={"outline"} px={5} py={5} borderRadius={15}>
+      <Box w={"100%"} position={"relative"}>
+        <Box pb={3}>
+          {d.user ? (
+            <Box my={3}>
+              <Flex alignItems={"center"}>
+                <Avatar src={d.user?.image} />
+                <Box ml={3}>
+                  <Text fontWeight={600}>
+                    {d.user ? d.user.lastName : "Anonymous"}
+                  </Text>
+                  <Text color={"GrayText"}>{d.user.email}</Text>
+                </Box>
+              </Flex>
+            </Box>
+          ) : null}
+        </Box>
+        {d.image ? (
+          <Box pb={5} borderRadius={15} overflow={"hidden"}>
+            <AspectRatio ratio={3 / 2} borderRadius={15} overflow={"hidden"}>
+              <Image src={d.image} fit={"contain"} />
+            </AspectRatio>
+          </Box>
+        ) : null}
+        <Flex w={"100%"}>
+          <Box>
+            <Text fontSize={"lg"} fontWeight={600}>
+              {d.name}
+            </Text>
+            <Flex color={"GrayText"}>
+              <Flex align={"center"}>
+                <Text fontSize={"md"}>{d.address}</Text>
+              </Flex>
             </Flex>
-          </Flex>
-          <Flex color={"GrayText"}>
+            {/* <Flex color={"GrayText"}>
             <Flex align={"center"}>
               <AiFillLike />
               <Text ml={2} fontSize={"md"}>
@@ -174,81 +199,66 @@ export default function PlaceList({ d }) {
                 {d.dislike}
               </Text>
             </Flex>
-          </Flex>
-          <SignedIn>
-            <RadioGroup
-              mt={2}
-              value={userInteractedObject ? stateValue : value}
-              onChange={(value) => handleLikeStatusChange(value)}
-            >
-              <Stack direction={"row"}>
-                <Radio value="1" isDisabled={isLoading || isDisabled}>
-                  Suka
-                </Radio>
-                <Radio value="2" isDisabled={isLoading || isDisabled}>
-                  Tidak Suka
-                </Radio>
-              </Stack>
-            </RadioGroup>
-          </SignedIn>
-          <Box mt={3}>
-            <Text>Komen :</Text>
-            <Box>
-              {d.comments.map((d, index) => (
-                <Box my={3} key={index}>
-                  <Flex alignItems={"center"}>
-                    <Avatar src={d.user?.image} />
-                    <Box ml={3}>
-                      <Flex>
-                        <Text fontWeight={600}>
-                          {d.user ? d.user.lastName : "Anonymous"}
-                        </Text>
-                      </Flex>
-                      <Box>
-                        <Text>{d.comment}</Text>
+          </Flex> */}
+            <Box mt={3}>
+              <Text>Komen :</Text>
+              <Box>
+                {d.comments.map((d, index) => (
+                  <Box my={3} key={index}>
+                    <Flex alignItems={"center"}>
+                      <Avatar src={d.user?.image} />
+                      <Box ml={3}>
+                        <Flex>
+                          <Text fontWeight={600}>
+                            {d.user ? d.user.lastName : "Anonymous"}
+                          </Text>
+                        </Flex>
+                        <Box>
+                          <Text>{d.comment}</Text>
+                        </Box>
                       </Box>
-                    </Box>
-                  </Flex>
-                </Box>
-              ))}
+                    </Flex>
+                  </Box>
+                ))}
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Flex>
-      <SignedIn>
-        <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-          <Textarea
-            placeholder="Memberi komen"
-            mt={2}
-            w={"100%"}
-            {...register("inputComment")}
-            isInvalid={errors.inputComment ? true : false}
-            isDisabled={isLoading}
-          />
-          <Button
-            variant={"solid"}
-            colorScheme={"blue"}
-            size={"sm"}
-            mt={3}
-            type="submit"
-            isDisabled={isLoading}
-          >
-            Komen
-          </Button>
-        </Box>
-      </SignedIn>
-      <SignedOut>
-        <Link href="/sign-in">
-          <Text
-            color={"GrayText"}
-            fontWeight={500}
-            fontStyle={"italic"}
-            textDecoration={"underline"}
-          >
-            Ingin memberi komen? Log masuk
-          </Text>
-        </Link>
-      </SignedOut>
-    </Box>
+        </Flex>
+        <SignedIn>
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Textarea
+              placeholder="Memberi komen"
+              mt={2}
+              w={"100%"}
+              {...register("inputComment")}
+              isInvalid={errors.inputComment ? true : false}
+              isDisabled={isLoading}
+            />
+            <Button
+              variant={"solid"}
+              colorScheme={"blue"}
+              size={"sm"}
+              mt={3}
+              type="submit"
+              isDisabled={isLoading}
+            >
+              Komen
+            </Button>
+          </Box>
+        </SignedIn>
+        <SignedOut>
+          <Link href="/sign-in">
+            <Text
+              color={"GrayText"}
+              fontWeight={500}
+              fontStyle={"italic"}
+              textDecoration={"underline"}
+            >
+              Ingin memberi komen? Log masuk
+            </Text>
+          </Link>
+        </SignedOut>
+      </Box>
+    </Card>
   );
 }

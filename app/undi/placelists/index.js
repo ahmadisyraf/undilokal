@@ -13,7 +13,7 @@ const PlaceList = dynamic(() => import("@/components/PlaceList"), {
 
 export default function PlaceLists({ tempat }) {
   return (
-    <Box width={"100%"} px={10}>
+    <Box width={"100%"} px={5}>
       <Box pb={8}>
         <Link
           href="/tambah"

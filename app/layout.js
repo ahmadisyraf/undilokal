@@ -3,6 +3,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
+import {Cloudinary} from "@cloudinary/url-gen";
 
 export const metadata = {
   title: "UndiLokal - Share Port Best",
@@ -16,6 +17,8 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const cld = new Cloudinary({cloud: {cloudName: 'datj7hdap'}});
+  
   return (
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <html lang="en">
