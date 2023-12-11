@@ -18,8 +18,7 @@ import * as yup from "yup";
 import { useEffect, useState, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { FaImage } from "react-icons/fa";
-import { ImageCompressor } from "image-compressor";
+import Compressor from "compressorjs";
 
 const schema = yup.object({
   inputName: yup.string().required("Nama tempat perlu di isi"),
@@ -44,10 +43,8 @@ export default function AddForm() {
     setIsLoading(true);
     const loadingToast = toast.loading("Sedang menyimpan");
 
-    const compressedImage = await compressImage(file);
-
     const formData = new FormData();
-    formData.append("file", compressedImage);
+    formData.append("file", file);
     formData.append("upload_preset", "ldk0n3ih");
 
     try {
@@ -107,28 +104,35 @@ export default function AddForm() {
   const [file, setFile] = useState(null);
   const [filename, setFilename] = useState("");
 
-  const compressImage = async (imageFile) => {
-    const options = {
-      quality: 0.8,
-    };
+  const handleFileChange = async (event) => {
+    const image = event.target.files[0];
+
+    console.log(image, "..image");
+    setFilename(image.name);
 
     try {
-      const compressedFile = await new ImageCompressor(
-        imageFile,
-        options
-      ).compress();
+      const compressedBlob = await new Promise((resolve, reject) => {
+        new Compressor(image, {
+          quality: 0.8, 
+          mimeType: "image/jpeg", 
+          success(result) {
+            resolve(result);
+          },
+          error(error) {
+            reject(error);
+          },
+        });
+      });
 
-      return compressedFile;
-    } catch (err) {
-      console.error("Error compressing image:", err);
-      throw err;
+      setFile(compressedBlob);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
     }
   };
 
-  const handleFileChange = async (event) => {
-    setFile(event.target.files[0]);
-    setFilename(event.target.files[0].name);
-  };
+  console.log(file, "..file");
 
   return (
     <Box px={5} as="form" onSubmit={handleSubmit(onSubmit)}>
@@ -140,6 +144,7 @@ export default function AddForm() {
               <Image src={URL.createObjectURL(file)} alt="Chosen Image" />
             </AspectRatio>
           ) : (
+            // <Text>Hello world</Text>
             <Center>
               <Box
                 color={"GrayText"}
@@ -147,7 +152,13 @@ export default function AddForm() {
                 display={"flex"}
                 flexDirection={"column"}
               >
-                <Button onClick={handleOpenFile} colorScheme={"blue"} size={"sm"}>Muat naik gambar</Button>
+                <Button
+                  onClick={handleOpenFile}
+                  colorScheme={"blue"}
+                  size={"sm"}
+                >
+                  Muat naik gambar
+                </Button>
                 <VisuallyHidden>
                   <input
                     type="file"
