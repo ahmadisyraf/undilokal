@@ -1,9 +1,10 @@
 "use client";
-import { Skeleton, Flex, VStack } from "@chakra-ui/react";
+import { Skeleton, Flex, VStack, AspectRatio } from "@chakra-ui/react";
 
 export default function Loading() {
   return (
     <VStack pl={0} align={"start"}>
+      <Skeleton width={"100%"} height={{ base: 200, md: 350 }} mb={2} />
       <Skeleton width={"70%"} height={8} />
       <Skeleton width={"50%"} height={4} />
       <Flex w={"100%"}>

@@ -1,12 +1,24 @@
 "use client";
-import { Input, Button, Stack, Box, Heading } from "@chakra-ui/react";
+import {
+  Input,
+  Button,
+  Stack,
+  Box,
+  Heading,
+  Card,
+  Text,
+  Center,
+  VisuallyHidden,
+  Image,
+  AspectRatio,
+} from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import useObjectStore from "@/store/undi";
+import { FaImage } from "react-icons/fa";
 
 const schema = yup.object({
   inputName: yup.string().required("Nama tempat perlu di isi"),
@@ -23,36 +35,51 @@ export default function AddForm() {
   });
 
   const router = useRouter();
-  const { submitted, setSubmitted } = useObjectStore();
-
   const [isLoading, setIsLoading] = useState(false);
 
-  const [limit, setLimit] = useState(false);
-
-  useEffect(() => {
-    if (submitted) {
-      setLimit(true);
-    }
-  }, [submitted]);
+  const inputFileRef = useRef(null);
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     const loadingToast = toast.loading("Sedang menyimpan");
 
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ldk0n3ih");
+
     try {
+      const uploadImage = await fetch(
+        "https://api.cloudinary.com/v1_1/datj7hdap/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!uploadImage.ok) {
+        throw new Error("Image can't be upload");
+      }
+
+      const image = await uploadImage.json();
+
+      console.log(image);
+
+      const obj = {
+        inputName: data.inputName,
+        inputAddress: data.inputAddress,
+        inputImage: image.secure_url,
+      };
+
       const response = await fetch("/api/tempat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: jwtToken,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(obj),
       });
 
-      const resdb = await response.json();
-
-      if (resdb) {
-        console.log(resdb, "..dari db");
+      if (!response.ok) {
+        throw new Error("Failed post to DB");
       }
 
       toast.success("Berjaya disimpan", {
@@ -61,8 +88,6 @@ export default function AddForm() {
 
       setIsLoading(false);
 
-      setSubmitted(true);
-
       router.push("/");
     } catch (err) {
       setIsLoading(false);
@@ -70,32 +95,72 @@ export default function AddForm() {
       toast.error("Gagal disimpan", {
         id: loadingToast,
       });
+      throw new Error(err.message);
     }
+  };
+
+  const handleOpenFile = () => {
+    inputFileRef.current.click();
+  };
+
+  const [file, setFile] = useState(null);
+  const [filename, setFilename] = useState("");
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+    setFilename(event.target.files[0].name);
   };
 
   return (
     <Box px={5} as="form" onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         <Heading>Tambah tempat</Heading>
+        <Card variant={"outline"} px={5} py={5} onClick={handleOpenFile}>
+          {file ? (
+            <AspectRatio ratio={3 / 2}>
+              <Image src={URL.createObjectURL(file)} alt="Chosen Image" />
+            </AspectRatio>
+          ) : (
+            <Center>
+              <Box
+                color={"GrayText"}
+                alignItems={"center"}
+                display={"flex"}
+                flexDirection={"column"}
+              >
+                <FaImage fontSize={50} />
+                <Heading size={"md"}>Add and upload image</Heading>
+                <VisuallyHidden>
+                  <input
+                    type="file"
+                    ref={inputFileRef}
+                    onChange={handleFileChange}
+                  />
+                </VisuallyHidden>
+              </Box>
+            </Center>
+          )}
+        </Card>
+        <Text color={"GrayText"}>{filename}</Text>
         <Input
           placeholder="Nama tempat"
           size="md"
           {...register("inputName")}
           isInvalid={errors.inputName ? true : false}
-          isDisabled={isLoading || limit}
+          isDisabled={isLoading}
         />
         <Input
           placeholder="Lokasi"
           size="md"
           {...register("inputAddress")}
           isInvalid={errors.inputAddress ? true : false}
-          isDisabled={isLoading || limit}
+          isDisabled={isLoading}
         />
         <Button
           colorScheme="blue"
           variant="solid"
           type="submit"
-          isDisabled={isLoading || limit}
+          isDisabled={isLoading}
         >
           Simpan
         </Button>
