@@ -19,6 +19,7 @@ import { useEffect, useState, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { FaImage } from "react-icons/fa";
+import { ImageCompressor } from "image-compressor";
 
 const schema = yup.object({
   inputName: yup.string().required("Nama tempat perlu di isi"),
@@ -43,8 +44,10 @@ export default function AddForm() {
     setIsLoading(true);
     const loadingToast = toast.loading("Sedang menyimpan");
 
+    const compressedImage = await compressImage(file);
+
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", compressedImage);
     formData.append("upload_preset", "ldk0n3ih");
 
     try {
@@ -61,8 +64,6 @@ export default function AddForm() {
       }
 
       const image = await uploadImage.json();
-
-      console.log(image);
 
       const obj = {
         inputName: data.inputName,
@@ -106,7 +107,25 @@ export default function AddForm() {
   const [file, setFile] = useState(null);
   const [filename, setFilename] = useState("");
 
-  const handleFileChange = (event) => {
+  const compressImage = async (imageFile) => {
+    const options = {
+      quality: 0.8,
+    };
+
+    try {
+      const compressedFile = await new ImageCompressor(
+        imageFile,
+        options
+      ).compress();
+
+      return compressedFile;
+    } catch (err) {
+      console.error("Error compressing image:", err);
+      throw err;
+    }
+  };
+
+  const handleFileChange = async (event) => {
     setFile(event.target.files[0]);
     setFilename(event.target.files[0].name);
   };
@@ -115,7 +134,7 @@ export default function AddForm() {
     <Box px={5} as="form" onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         <Heading>Tambah tempat</Heading>
-        <Card variant={"outline"} px={5} py={5} onClick={handleOpenFile}>
+        <Card variant={"outline"} px={5} py={5}>
           {file ? (
             <AspectRatio ratio={3 / 2}>
               <Image src={URL.createObjectURL(file)} alt="Chosen Image" />
@@ -128,8 +147,7 @@ export default function AddForm() {
                 display={"flex"}
                 flexDirection={"column"}
               >
-                <FaImage fontSize={50} />
-                <Heading size={"md"}>Add and upload image</Heading>
+                <Button onClick={handleOpenFile} colorScheme={"blue"} size={"sm"}>Muat naik gambar</Button>
                 <VisuallyHidden>
                   <input
                     type="file"
