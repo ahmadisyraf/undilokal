@@ -161,7 +161,7 @@ export default function PlaceList({ d }) {
                 <Avatar src={d.user?.image} />
                 <Box ml={3}>
                   <Text fontWeight={600}>
-                    {d.user ? d.user.lastName : "Anonymous"}
+                    {d.user ? d.user.firstName + " " + d.user.lastName : "Anonymous"}
                   </Text>
                   <Text color={"GrayText"}>{d.user.email}</Text>
                 </Box>
