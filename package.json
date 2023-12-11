@@ -20,6 +20,7 @@
     "@hookform/resolvers": "^3.3.2",
     "@prisma/client": "^5.7.0",
     "framer-motion": "^10.16.12",
+    "image-compressor": "^2.0.3",
     "million": "^2.6.4",
     "next": "14.0.3",
     "react": "^18",
