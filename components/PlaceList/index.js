@@ -210,7 +210,7 @@ export default function PlaceList({ d }) {
                       <Box ml={3}>
                         <Flex>
                           <Text fontWeight={600}>
-                            {d.user ? d.user.lastName : "Anonymous"}
+                            {d.user ? d.user.firstName + " " + d.user.lastName : "Anonymous"}
                           </Text>
                         </Flex>
                         <Box>
