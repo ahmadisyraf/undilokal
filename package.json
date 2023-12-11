@@ -19,6 +19,8 @@
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.2",
     "@prisma/client": "^5.7.0",
+    "browser-image-compression": "^2.0.2",
+    "compressorjs": "^1.2.1",
     "framer-motion": "^10.16.12",
     "image-compressor": "^2.0.3",
     "million": "^2.6.4",
