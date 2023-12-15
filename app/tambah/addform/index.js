@@ -135,7 +135,7 @@ export default function AddForm() {
   console.log(file, "..file");
 
   return (
-    <Box px={5} as="form" onSubmit={handleSubmit(onSubmit)}>
+    <Box px={{ base: 5, md: 200 }} py={10} as="form" onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         <Heading>Kongsi Tempat Menarik!</Heading>
         <Card variant={"outline"} px={5} py={5} borderRadius={15}>
