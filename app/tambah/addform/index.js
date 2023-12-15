@@ -113,8 +113,8 @@ export default function AddForm() {
     try {
       const compressedBlob = await new Promise((resolve, reject) => {
         new Compressor(image, {
-          quality: 0.8, 
-          mimeType: "image/jpeg", 
+          quality: 0.8,
+          mimeType: "image/jpeg",
           success(result) {
             resolve(result);
           },
@@ -137,14 +137,23 @@ export default function AddForm() {
   return (
     <Box px={5} as="form" onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-        <Heading>Tambah tempat</Heading>
-        <Card variant={"outline"} px={5} py={5}>
+        <Heading>Kongsi Tempat Menarik!</Heading>
+        <Card variant={"outline"} px={5} py={5} borderRadius={15}>
           {file ? (
-            <AspectRatio ratio={3 / 2}>
-              <Image src={URL.createObjectURL(file)} alt="Chosen Image" />
-            </AspectRatio>
+            <>
+              <AspectRatio
+                ratio={{ base: 3 / 2, md: 1 / 1 }}
+                width={{ base: "100%", md: 200 }}
+                borderRadius={15}
+                overflow={"hidden"}
+              >
+                <Image src={URL.createObjectURL(file)} alt="Chosen Image" />
+              </AspectRatio>
+              <Text color={"GrayText"} mt={3}>
+                {filename}
+              </Text>
+            </>
           ) : (
-            // <Text>Hello world</Text>
             <Center>
               <Box
                 color={"GrayText"}
@@ -164,13 +173,13 @@ export default function AddForm() {
                     type="file"
                     ref={inputFileRef}
                     onChange={handleFileChange}
+                    accept="image/jpg, image/png"
                   />
                 </VisuallyHidden>
               </Box>
             </Center>
           )}
         </Card>
-        <Text color={"GrayText"}>{filename}</Text>
         <Input
           placeholder="Nama tempat"
           size="md"

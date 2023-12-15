@@ -20,15 +20,13 @@ export default function ImageModal({ open, setOpen, image }) {
         <ModalHeader>Photo</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Box pb={5} borderRadius={15} overflow={"hidden"}>
-            <AspectRatio ratio={3 / 2} borderRadius={15} overflow={"hidden"}>
-              <Image
-                src={image}
-                fit={"contain"}
-                fallback={<Skeleton height={450 * (2 / 3)} width="100%" />}
-                loading="lazy"
-              />
-            </AspectRatio>
+          <Box borderRadius={15} overflow={"hidden"} position={"fit-content"}>
+            <Image
+              src={image}
+              fit={"contain"}
+              fallback={<Skeleton height={450 * (2 / 3)} width="100%" />}
+              loading="lazy"
+            />
           </Box>
         </ModalBody>
       </ModalContent>
