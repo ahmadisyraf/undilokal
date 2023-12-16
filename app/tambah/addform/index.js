@@ -167,7 +167,7 @@ export default function AddForm() {
   return (
     <Box
       px={{ base: 5, md: 200 }}
-      py={10}
+      py={20}
       as="form"
       onSubmit={handleSubmit(onSubmit)}
     >

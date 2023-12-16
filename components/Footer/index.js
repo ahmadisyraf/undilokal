@@ -2,7 +2,7 @@ import { Box, Text, Center, Link } from "@chakra-ui/react";
 
 export default function Footer() {
   return (
-    <Box w={"100%"} position={"relative"} py={5} color={"GrayText"}>
+    <Box w={"100%"} position={"relative"} py={5} color={"GrayText"} bgColor={"white"}>
       <Center>
         <Text>
           Sistem ini dibangunkan oleh{" "}
