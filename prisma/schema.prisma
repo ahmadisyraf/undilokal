@@ -11,15 +11,26 @@ generator client {
 }
 
 model Listing {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  address  String
-  image    String?
-  like     Int
-  dislike  Int
-  user     User?     @relation(fields: [userId], references: [id])
-  comments Comment[]
-  userId   String?   @db.ObjectId
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  address    Address?
+  coordinate Coordinate?
+  image      String?
+  user       User?       @relation(fields: [userId], references: [id])
+  comments   Comment[]
+  userId     String?     @db.ObjectId
+}
+
+type Address {
+  addressLine String
+  postcode    String
+  city        String
+  state       String
+}
+
+type Coordinate {
+  longitude Float
+  latitude  Float
 }
 
 model Comment {
@@ -39,5 +50,5 @@ model User {
   email     String    @unique
   image     String
   comments  Comment[]
-  Listing   Listing[]
+  listings  Listing[]
 }
