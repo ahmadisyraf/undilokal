@@ -114,7 +114,17 @@ export default function PlaceList({ d }) {
             </Text>
             <Flex color={"GrayText"}>
               <Flex align={"center"}>
-                <Text fontSize={"md"}>{d.address}</Text>
+                <Text fontSize={"md"}>
+                  {d.address
+                    ? d.address.addressLine +
+                      ", " +
+                      d.address.postcode +
+                      " " +
+                      d.address.city +
+                      ", " +
+                      d.address.state
+                    : null}
+                </Text>
               </Flex>
             </Flex>
             <Box mt={3}>

@@ -7,7 +7,16 @@ const prisma = new PrismaClient();
 export async function POST(req = NextRequest) {
   const { userId } = auth();
   try {
-    const { inputName, inputAddress, inputImage } = await req.json();
+    const {
+      inputName,
+      inputAddressLine,
+      inputPostcode,
+      inputCity,
+      inputState,
+      inputImage,
+      inputLatitude,
+      inputLongitude,
+    } = await req.json();
 
     const user = await prisma.user.findUnique({
       where: {
@@ -22,10 +31,21 @@ export async function POST(req = NextRequest) {
     const tempat = await prisma.listing.create({
       data: {
         name: inputName,
-        address: inputAddress,
+        address: {
+          set: {
+            addressLine: inputAddressLine,
+            postcode: inputPostcode,
+            city: inputCity,
+            state: inputState,
+          },
+        },
+        coordinate: {
+          set: {
+            longitude: inputLongitude,
+            latitude: inputLatitude,
+          },
+        },
         image: inputImage,
-        like: 0,
-        dislike: 0,
         user: { connect: { id: user.id } },
       },
     });
@@ -36,7 +56,7 @@ export async function POST(req = NextRequest) {
       return NextResponse.json({ status: 400 });
     }
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 500 });
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
@@ -45,7 +65,7 @@ export async function GET() {
     const tempat = await prisma.listing.findMany({
       include: {
         user: {
-          include: true
+          include: true,
         },
         comments: {
           include: {
