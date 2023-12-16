@@ -37,7 +37,7 @@ export default function Navigation() {
   }, [isSignedIn]);
 
   return (
-    <Box px={5} py={5}>
+    <Box px={5} py={4} position={"fixed"} width={"100%"} zIndex={1000} bgColor={"white"}>
       <Flex align={"center"}>
         <Link href={"/"}>
           <Text fontWeight={600} fontSize={"xl"}>
